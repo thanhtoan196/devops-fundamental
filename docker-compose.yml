@@ -40,8 +40,8 @@ services:
   aws:
     image: organs/awscli
     environment:
-      AWS_ACCESS_KEY_ID: AKIA4WIETKWDGV5YSJRF
-      AWS_SECRET_ACCESS_KEY: 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
+      AWS_ACCESS_KEY_ID: #to input AWS key
+      AWS_SECRET_ACCESS_KEY: #to input AWS key
       AWS_REGION: ap-southeast-1
       AWS_DEFAULT_REGION: ap-southeast-1
     volumes:
