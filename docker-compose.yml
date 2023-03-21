@@ -1,0 +1,59 @@
+version: '3.3'
+services:
+
+  website:
+   build:
+    context: .
+   ports:
+    - 80:80
+
+  intergration-tests:
+    build:
+      dockerfile: rspec.dockerfile
+      context: .
+
+    volumes:
+      - $PWD:/app
+
+    entrypoint: ["rspec"]
+    command: ["app/spec/unit/intergration/page_spec.rb"]
+
+  selenium:
+    image: selenium/standalone-chrome-debug
+    ports:
+      - 4444:4444
+      - 5901:5900
+  
+  terraform:
+    build:
+      dockerfile: terraform.dockerfile
+      context: .
+    volumes:
+      - $PWD:/app
+    working_dir: /app
+    environment:
+      AWS_ACCESS_KEY_ID: AKIA4WIETKWDGV5YSJRF
+      AWS_SECRET_ACCESS_KEY: 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
+      AWS_REGION: ap-southeast-1
+      AWS_DEFAULT_REGION: ap-southeast-1
+
+  aws:
+    image: organs/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: AKIA4WIETKWDGV5YSJRF
+      AWS_SECRET_ACCESS_KEY: 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
+      AWS_REGION: ap-southeast-1
+      AWS_DEFAULT_REGION: ap-southeast-1
+    volumes:
+      - $PWD:/app
+    working_dir: /app
+
+  jenkins:
+    build:
+      context: .
+      dockerfile: jenkins.dockerfile
+    volumes:
+      - $PWD/jenkins_home:/var/jenkins_home
+      - $PWD:/app
+    ports:
+      - 8080:8080
